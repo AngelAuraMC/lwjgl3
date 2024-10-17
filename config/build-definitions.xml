@@ -9,6 +9,26 @@ Defines global properties and useful macros.
 This script is included in /build.xml and /config/update-dependencies.xml.
 -->
 <project name="definitions" basedir="../" xmlns:if="ant:if" xmlns:unless="ant:unless">
+    <property name="bin.ant" location="bin/classes/ant" relative="true"/>
+
+    <!-- Compile custom Ant tasks -->
+    <mkdir dir="bin/classes/ant"/>
+    <javac
+        sourcepath="" debug="yes" source="8" target="8" encoding="UTF-8" includeantruntime="false" nowarn="true"
+
+        destdir="bin/classes/ant"
+        classpath="${ant.core.lib}"
+
+        srcdir="modules/ant/src/main/java"
+        includes="org/lwjgl/**"
+
+        taskname="javac: Custom Ant Tasks"
+    />
+
+    <!-- Define custom Ant tasks -->
+    <taskdef name="logLevel" classname="org.lwjgl.SetLogLevel" classpath="${bin.ant}"/>
+    <taskdef name="bindingConfig" classname="org.lwjgl.BindingConfig" classpath="${bin.ant}"/>
+
     <property environment="env"/>
 
     <!--
@@ -88,7 +108,6 @@ This script is included in /build.xml and /config/update-dependencies.xml.
 
     <property name="test.resources" location="modules/samples/src/test/resources" relative="true"/>
 
-    <property name="bin.ant" location="bin/classes/ant" relative="true"/>
     <property name="bin.extract" location="bin/classes/extract" relative="true"/>
     <property name="bin.generator" location="bin/classes/generator" relative="true"/>
     <property name="bin.javadoc" location="bin/javadoc" relative="true"/>
@@ -185,6 +204,7 @@ This script is included in /build.xml and /config/update-dependencies.xml.
     <property name="bin.native" location="bin/${platform}/${build.arch}" relative="true"/>
 
     <import file="build-bindings.xml"/>
+    <bindingConfig/>
 
     <presetdef name="lwjgl.javac">
         <javac sourcepath="" debug="yes" source="8" target="8" encoding="UTF-8">
