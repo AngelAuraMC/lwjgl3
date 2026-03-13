@@ -12,8 +12,8 @@ elif [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
 elif [ "$LWJGL_BUILD_ARCH" == "x86" ]; then
   export NDK_ABI=x86 NDK_TARGET=i686
   # Workaround: LWJGL 3 lacks of x86 Linux libraries
-  mkdir -p bin/libs/native/linux/x86/org/lwjgl/{freetype,glfw}
-  touch bin/libs/native/linux/x86/org/lwjgl/{freetype/libfreetype.so,glfw/libglfw.so}
+  mkdir -p bin/libs/native/linux/x86/org/lwjgl/{freetype,glfw,jemalloc}
+  touch bin/libs/native/linux/x86/org/lwjgl/{freetype/libfreetype.so,glfw/libglfw.so,jemalloc/libjemalloc.so}
 elif [ "$LWJGL_BUILD_ARCH" == "x64" ]; then
   export NDK_ABI=x86_64 NDK_TARGET=x86_64
 fi
@@ -95,7 +95,7 @@ yes | ant -Dplatform.linux=true \
   -Dbinding.harfbuzz=false \
   -Dbinding.hwloc=false \
   -Dbinding.jawt=false \
-  -Dbinding.jemalloc=false \
+  -Dbinding.jemalloc=true \
   -Dbinding.ktx=false \
   -Dbinding.libdivide=false \
   -Dbinding.llvm=false \
@@ -106,6 +106,7 @@ yes | ant -Dplatform.linux=true \
   -Dbinding.nfd=false \
   -Dbinding.nuklear=false \
   -Dbinding.odbc=false \
+  -Dbinding.opengles=false \
   -Dbinding.opencl=false \
   -Dbinding.openvr=false \
   -Dbinding.openxr=false \
@@ -113,17 +114,21 @@ yes | ant -Dplatform.linux=true \
   -Dbinding.par=false \
   -Dbinding.remotery=false \
   -Dbinding.rpmalloc=false \
-  -Dbinding.spvc=false \
   -Dbinding.sse=false \
   -Dbinding.tinyexr=false \
   -Dbinding.tootle=false \
   -Dbinding.xxhash=false \
   -Dbinding.yoga=false \
   -Dbinding.zstd=false \
+  -Dbinding.shaderc=false \
+  -Dbinding.vulkan=false \
+  -Dbinding.vma=false \
+  -Dbinding.spvc=false \
   -Dbuild.type=release/3.3.3 \
   -Djavadoc.skip=true \
   -Dnashorn.args="--no-deprecation-warning" \
   compile compile-native release
+# shaderc, vulkan, spvc, and vma can be reenabled if needed but for now, including them just leads to conflicts and crashes cause cinnabar overrides it.
 
 # Copy native libraries
 rm -rf bin/out; mkdir bin/out
