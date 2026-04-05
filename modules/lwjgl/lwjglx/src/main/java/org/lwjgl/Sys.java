@@ -1,7 +1,8 @@
 package org.lwjgl;
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.Platform;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.Desktop;
 import java.net.URI;
@@ -79,6 +80,10 @@ public class Sys {
 			LWJGLUtil.log("Caught exception while setting Look-and-Feel: " + e);
 		}
 		JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
+	}
+
+	public static boolean is64Bit() {
+		return Platform.getArchitecture().toString().endsWith("64");
 	}
 
 	public static String getClipboard() {
