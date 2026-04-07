@@ -30,13 +30,13 @@ jobs:
       if: ${{matrix.arch == 'arm64'}} # Only upload this once
       uses: actions/upload-artifact@v4
       with:
-        name: lwjgl3-android-modules
+        name: lwjgl-3.3.3-android-modules
         path: bin/RELEASE
 
     - name: Upload native build output
       uses: actions/upload-artifact@v4
       with:
-        name: lwjgl3-android-natives-${{matrix.arch}}
+        name: lwjgl-3.3.3-android-natives-${{matrix.arch}}
         path: bin/out
   aar:
     needs: build
@@ -51,23 +51,23 @@ jobs:
     - name: Download built native artifacts (arm64)
       uses: actions/download-artifact@v8
       with:
-          name: lwjgl3-android-natives-arm64
-          path: .github/workflows/android/jniLibs/arm64-v8a
+          name: lwjgl-3.3.3-android-natives-arm64
+          path: .github/workflows/android/assets/components/lwjgl-3.3.3-natives/arm64-v8a
     - name: Download built native artifacts (arm32)
       uses: actions/download-artifact@v8
       with:
-          name: lwjgl3-android-natives-arm32
-          path: .github/workflows/android/jniLibs/armeabi-v7a
+          name: lwjgl-3.3.3-android-natives-arm32
+          path: .github/workflows/android/assets/components/lwjgl-3.3.3-natives/armeabi-v7a
     - name: Download built native artifacts (x64)
       uses: actions/download-artifact@v8
       with:
-          name: lwjgl3-android-natives-x64
-          path: .github/workflows/android/jniLibs/x86_64
+          name: lwjgl-3.3.3-android-natives-x64
+          path: .github/workflows/android/assets/components/lwjgl-3.3.3-natives/x86_64
     - name: Download built native artifacts (x86)
       uses: actions/download-artifact@v8
       with:
-          name: lwjgl3-android-natives-x86
-          path: .github/workflows/android/jniLibs/x86
+          name: lwjgl-3.3.3-android-natives-x86
+          path: .github/workflows/android/assets/components/lwjgl-3.3.3-natives/x86
     - name: Compile into one AAR
       run: |
           cd $GITHUB_WORKSPACE/.github/workflows/android
@@ -75,5 +75,5 @@ jobs:
     - name: Upload AAR
       uses: actions/upload-artifact@v4
       with: 
-          name: lwjgl3-android-natives-aar
-          path: .github/workflows/android/build/outputs/aar/lwjgl3-natives-release.aar
+          name: lwjgl-3.3.3-android-natives-aar
+          path: .github/workflows/android/build/outputs/aar/lwjgl-3.3.3-natives-release.aar
