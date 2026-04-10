@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 export LIBFFI_VERSION=3.4.6
-export ANDROID=1 LWJGL_BUILD_OFFLINE=1
+export ANDROID=1
 #export LWJGL_BUILD_ARCH=arm64
 
 # Setup env
@@ -86,6 +86,8 @@ touch bin/classes/{generator,templates}/touch.txt bin/classes/generator/generate
 
 # Build LWJGL 3
 ant -version
+yes | ant init # Needed to download deps like kotlinc. We can't have this run offline, else jsr305 annotations fails to download and we get errors about annotations gone missing
+export LWJGL_BUILD_OFFLINE=true
 yes | ant -Dplatform.linux=true \
   -Dbinding.assimp=false \
   -Dbinding.bgfx=false \
