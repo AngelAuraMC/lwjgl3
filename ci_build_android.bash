@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 export LIBFFI_VERSION=3.4.6
-export ANDROID=1 LWJGL_BUILD_OFFLINE=1
+export ANDROID=1
 #export LWJGL_BUILD_ARCH=arm64
 
 # Setup env
@@ -12,8 +12,8 @@ elif [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
 elif [ "$LWJGL_BUILD_ARCH" == "x86" ]; then
   export NDK_ABI=x86 NDK_TARGET=i686
   # Workaround: LWJGL 3 lacks of x86 Linux libraries
-  mkdir -p bin/libs/native/linux/x86/org/lwjgl/{freetype,glfw}
-  touch bin/libs/native/linux/x86/org/lwjgl/{freetype/libfreetype.so,glfw/libglfw.so}
+  mkdir -p bin/libs/native/linux/x86/org/lwjgl/{freetype,glfw,jemalloc}
+  touch bin/libs/native/linux/x86/org/lwjgl/{freetype/libfreetype.so,glfw/libglfw.so,jemalloc/libjemalloc.so}
 elif [ "$LWJGL_BUILD_ARCH" == "x64" ]; then
   export NDK_ABI=x86_64 NDK_TARGET=x86_64
 fi
@@ -75,7 +75,7 @@ if [ "$SKIP_FREETYPE" != "1" ]; then
 fi
 
 # Download libraries
-POJAV_NATIVES="https://github.com/AngelAuraMC/Amethyst-Android/raw/v3_openjdk/app_pojavlauncher/src/main/jniLibs/$NDK_ABI"
+POJAV_NATIVES="https://github.com/AngelAuraMC/Amethyst-Android/raw/34fe895c4d6117b50dd19a69819cd5430de6fc06/app_pojavlauncher/src/main/jniLibs/$NDK_ABI"
 wget -nc $POJAV_NATIVES/libopenal.so -P $LWJGL_NATIVE/openal
 wget -nc "https://github.com/AngelAuraMC/shaderc/releases/latest/download/libshaderc-$NDK_ABI.zip"
 unzip -o libshaderc-$NDK_ABI.zip -d $LWJGL_NATIVE/shaderc
@@ -86,6 +86,8 @@ touch bin/classes/{generator,templates}/touch.txt bin/classes/generator/generate
 
 # Build LWJGL 3
 ant -version
+yes | ant init # Needed to download deps like kotlinc. We can't have this run offline, else jsr305 annotations fails to download and we get errors about annotations gone missing
+export LWJGL_BUILD_OFFLINE=true
 yes | ant -Dplatform.linux=true \
   -Dbinding.assimp=false \
   -Dbinding.bgfx=false \
@@ -106,6 +108,7 @@ yes | ant -Dplatform.linux=true \
   -Dbinding.nfd=false \
   -Dbinding.nuklear=false \
   -Dbinding.odbc=false \
+  -Dbinding.opengles=false \
   -Dbinding.opencl=false \
   -Dbinding.openvr=false \
   -Dbinding.openxr=false \
@@ -113,13 +116,16 @@ yes | ant -Dplatform.linux=true \
   -Dbinding.par=false \
   -Dbinding.remotery=false \
   -Dbinding.rpmalloc=false \
-  -Dbinding.spvc=false \
   -Dbinding.sse=false \
   -Dbinding.tinyexr=false \
   -Dbinding.tootle=false \
   -Dbinding.xxhash=false \
   -Dbinding.yoga=false \
   -Dbinding.zstd=false \
+  -Dbinding.shaderc=true \
+  -Dbinding.vulkan=true \
+  -Dbinding.vma=true \
+  -Dbinding.spvc=true \
   -Dbuild.type=release/3.3.3 \
   -Djavadoc.skip=true \
   -Dnashorn.args="--no-deprecation-warning" \
