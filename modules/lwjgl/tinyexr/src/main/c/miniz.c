@@ -3224,6 +3224,15 @@ static int mz_stat64(const char *path, struct __stat64 *buffer)
 #endif /* #ifdef _MSC_VER */
 #endif /* #ifdef MINIZ_NO_STDIO */
 
+// See https://android.googlesource.com/platform/bionic/+/main/docs/32-bit-abi.md
+#if defined(__ANDROID__) && __ANDROID_API__ < 24
+    #define MZ_FTELL64 ftell
+    #define MZ_FSEEK64 fseek
+#else
+    #define MZ_FTELL64 ftello
+    #define MZ_FSEEK64 fseeko
+#endif
+
 #define MZ_TOLOWER(c) ((((c) >= 'A') && ((c) <= 'Z')) ? ((c) - 'A' + 'a') : (c))
 
 /* Various ZIP archive enums. To completely avoid cross platform compiler alignment and platform endian issues, miniz.c doesn't use structs for any of this stuff. */
