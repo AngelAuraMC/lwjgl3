@@ -13,14 +13,14 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.lwjglx.opengl;
+package org.lwjgl.opengl;
 
 import java.nio.IntBuffer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.lwjglx.BufferUtils;
-import org.lwjglx.LWJGLUtil;
+// import org.lwjglx.BufferUtils;
+// import org.lwjglx.LWJGLUtil;
 
 public final class ContextAttribs {
 
@@ -322,7 +322,7 @@ public final class ContextAttribs {
 
         if (!(strategy == NO_RESET_NOTIFICATION_ARB || strategy == LOSE_CONTEXT_ON_RESET_ARB))
             throw new IllegalArgumentException(
-                "Invalid context reset notification strategy specified: 0x" + LWJGLUtil.toHexString(strategy));
+                "Invalid context reset notification strategy specified: " + strategy);
 
         ContextAttribs attribs = new ContextAttribs(this);
         attribs.contextResetNotificationStrategy = strategy;
@@ -360,7 +360,7 @@ public final class ContextAttribs {
 
         if (!(behavior == CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB || behavior == CONTEXT_RELEASE_BEHAVIOR_NONE_ARB))
             throw new IllegalArgumentException(
-                "Invalid context release behavior specified: 0x" + LWJGLUtil.toHexString(behavior));
+                "Invalid context release behavior specified: " + behavior);
 
         ContextAttribs attribs = new ContextAttribs(this);
         attribs.contextReleaseBehavior = behavior;
@@ -369,51 +369,52 @@ public final class ContextAttribs {
 
     /** Returns a new {@code ContextAttribs} instance with {@link #CONTEXT_LAYER_PLANE_ARB} set to the given value. */
     public ContextAttribs withLayer(int layerPlane) {
-        if (LWJGLUtil.getPlatform() != LWJGLUtil.PLATFORM_WINDOWS) throw new IllegalArgumentException(
-            "The CONTEXT_LAYER_PLANE_ARB attribute is supported only on the Windows platform.");
-
-        if (layerPlane == this.layerPlane) return this;
-
-        if (layerPlane < 0) throw new IllegalArgumentException("Invalid layer plane specified: " + layerPlane);
-
-        ContextAttribs attribs = new ContextAttribs(this);
-        attribs.layerPlane = layerPlane;
-        return attribs;
+        // if (LWJGLUtil.getPlatform() != LWJGLUtil.PLATFORM_WINDOWS) throw new IllegalArgumentException(
+        //     "The CONTEXT_LAYER_PLANE_ARB attribute is supported only on the Windows platform.");
+        //
+        // if (layerPlane == this.layerPlane) return this;
+        //
+        // if (layerPlane < 0) throw new IllegalArgumentException("Invalid layer plane specified: " + layerPlane);
+        //
+        // ContextAttribs attribs = new ContextAttribs(this);
+        // attribs.layerPlane = layerPlane;
+        // return attribs;
+        return this;
     }
 
-    IntBuffer getAttribList() {
-        if (LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_MACOSX) return null;
-
-        LinkedHashMap<Integer, Integer> map = new LinkedHashMap<Integer, Integer>(8);
-
-        if (!(majorVersion == 1 && minorVersion == 0)) {
-            map.put(CONTEXT_MAJOR_VERSION_ARB, majorVersion);
-            map.put(CONTEXT_MINOR_VERSION_ARB, minorVersion);
-        }
-
-        if (contextFlags != 0) map.put(CONTEXT_FLAGS_ARB, contextFlags);
-
-        if (profileMask != 0) map.put(CONTEXT_PROFILE_MASK_ARB, profileMask);
-
-        if (contextResetNotificationStrategy != NO_RESET_NOTIFICATION_ARB)
-            map.put(CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB, contextResetNotificationStrategy);
-
-        if (contextReleaseBehavior != CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB)
-            map.put(CONTEXT_RELEASE_BEHABIOR_ARB, contextReleaseBehavior);
-
-        if (layerPlane != 0) map.put(CONTEXT_LAYER_PLANE_ARB, layerPlane);
-
-        if (map.isEmpty()) return null;
-
-        IntBuffer attribs = BufferUtils.createIntBuffer((map.size() * 2) + 1);
-        for (Map.Entry<Integer, Integer> attrib : map.entrySet()) {
-            attribs.put(attrib.getKey())
-                .put(attrib.getValue());
-        }
-        attribs.put(0);
-        attribs.rewind();
-        return attribs;
-    }
+    // IntBuffer getAttribList() {
+    //     // if (LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_MACOSX) return null;
+    //
+    //     LinkedHashMap<Integer, Integer> map = new LinkedHashMap<Integer, Integer>(8);
+    //
+    //     if (!(majorVersion == 1 && minorVersion == 0)) {
+    //         map.put(CONTEXT_MAJOR_VERSION_ARB, majorVersion);
+    //         map.put(CONTEXT_MINOR_VERSION_ARB, minorVersion);
+    //     }
+    //
+    //     if (contextFlags != 0) map.put(CONTEXT_FLAGS_ARB, contextFlags);
+    //
+    //     if (profileMask != 0) map.put(CONTEXT_PROFILE_MASK_ARB, profileMask);
+    //
+    //     if (contextResetNotificationStrategy != NO_RESET_NOTIFICATION_ARB)
+    //         map.put(CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB, contextResetNotificationStrategy);
+    //
+    //     if (contextReleaseBehavior != CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB)
+    //         map.put(CONTEXT_RELEASE_BEHABIOR_ARB, contextReleaseBehavior);
+    //
+    //     if (layerPlane != 0) map.put(CONTEXT_LAYER_PLANE_ARB, layerPlane);
+    //
+    //     if (map.isEmpty()) return null;
+    //
+    //     IntBuffer attribs = BufferUtils.createIntBuffer((map.size() * 2) + 1);
+    //     for (Map.Entry<Integer, Integer> attrib : map.entrySet()) {
+    //         attribs.put(attrib.getKey())
+    //             .put(attrib.getValue());
+    //     }
+    //     attribs.put(0);
+    //     attribs.rewind();
+    //     return attribs;
+    // }
 
     public String toString() {
         StringBuilder sb = new StringBuilder(32);
