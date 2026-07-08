@@ -69,6 +69,7 @@ yes | ant -Dplatform.macos=true \
   -Dbinding.nfd=false \
   -Dbinding.nuklear=false \
   -Dbinding.odbc=false \
+  -Dbinding.opengles=false \
   -Dbinding.opencl=false \
   -Dbinding.openvr=false \
   -Dbinding.openxr=false \
